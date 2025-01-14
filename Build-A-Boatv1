@@ -1,0 +1,64 @@
+local game = cloneref(game)
+for i,v in next, game.GetChildren(game) do
+    getgenv()[v.ClassName] = cloneref(v)
+end
+
+getgenv().Player = Players.LocalPlayer
+local Functions = {
+    Number = 1,
+}
+
+function Functions.MoveTo(Pos, Offset)
+    Player.Character:PivotTo(CFrame.new(Pos + Offset))
+end
+function Functions.Start()
+    Functions.MoveTo(Workspace.Teams.WhiteTeam:GetPivot().Position, Vector3.new(0,50,0))
+end
+
+function Functions.Tween(Model, TargetPos, SpeedEating)
+	if Model and Model.PrimaryPart then
+        local Speed = SpeedEating or 60
+        local Velocity = Model.PrimaryPart.Velocity
+        if Tweening then return end
+        repeat wait()
+            local Dir = (TargetPos - Model.PrimaryPart.Position).Unit
+            Tweening = true
+            Model.PrimaryPart.Velocity = Dir * Speed
+        until (Model.PrimaryPart.Position - Vector3.new(TargetPos.X, TargetPos.Y, TargetPos.Z)).Magnitude < 10
+        Model:SetPrimaryPartCFrame(CFrame.new(TargetPos))
+        Model.PrimaryPart.Velocity = Velocity
+        Tweening = false
+    end
+end
+
+function Functions.ClientUp()
+    Functions.Start()
+    Functions.Tween(Player.Character, Vector3.new(-64, 80, 8775), 500)
+    Functions.Tween(Player.Character, Vector3.new(-89, -330, 8797), 500)
+    Functions.Tween(Player.Character, Vector3.new(-58, -362, 9490), 500)
+    Player.CharacterAdded:Wait()
+end
+task.spawn(function()
+    while wait(1) and Start do
+        pcall(function()
+            if Tweening then
+                Functions.Number = Functions.Number + 1
+                print(Functions.Number)
+                if Functions.Number > 120 then
+                    print("Taking too long to tween resetting")
+                    if Player.Character and Player.Character:FindFirstChild("Humanoid") then
+                        Player.Character.Humanoid.Health = 0
+                    end
+                end
+            end
+        end)
+    end
+end)
+task.spawn(function()
+    while wait(1) and Start do
+        pcall(function()
+            Functions.ClientUp()
+            Functions.Number = 0
+        end)
+    end
+end)
