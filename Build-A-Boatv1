@@ -11,6 +11,10 @@ Player.Idled:Connect(function()
     VirtualInputManager:SendMouseButtonEvent(0,0,0, false, game, 0)
 end)
 
+Player.CharacterAdded:Connect(function()
+    Tweening = false
+end)
+
 local Functions = {
     Number = 1,
 }
