@@ -4,6 +4,13 @@ for i,v in next, game.GetChildren(game) do
 end
 
 getgenv().Player = Players.LocalPlayer
+getgenv().VirtualInputManager = Instance.new("VirtualInputManager")
+
+Player.Idled:Connect(function()
+    VirtualInputManager:SendMouseButtonEvent(0,0,0, true, game, 0)
+    VirtualInputManager:SendMouseButtonEvent(0,0,0, false, game, 0)
+end)
+
 local Functions = {
     Number = 1,
 }
@@ -11,6 +18,7 @@ local Functions = {
 function Functions.MoveTo(Pos, Offset)
     Player.Character:PivotTo(CFrame.new(Pos + Offset))
 end
+
 function Functions.Start()
     Functions.MoveTo(Workspace.Teams.WhiteTeam:GetPivot().Position, Vector3.new(0,50,0))
 end
@@ -38,6 +46,7 @@ function Functions.ClientUp()
     Functions.Tween(Player.Character, Vector3.new(-58, -362, 9490), 500)
     Player.CharacterAdded:Wait()
 end
+
 task.spawn(function()
     while wait(1) and Start do
         pcall(function()
